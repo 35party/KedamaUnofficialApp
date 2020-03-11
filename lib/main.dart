@@ -40,66 +40,93 @@ SelectView(IconData icon, String text, String id) {
           new Icon(icon, color: Colors.blue),
           new Text(text),
         ],
-      )
-  );
+      ));
 }
 
-
 class _MyHomePageState extends State<MyHomePage> {
+  var _scaffoldkey = new GlobalKey<ScaffoldState>();
+  DateTime lastPopTime = DateTime.now();
   WebViewController _controller;
+  Future<bool> _exitApp(BuildContext context) async {
+    if (await _controller.canGoBack()) {
+      _controller.goBack();
+    } else {
+      if (lastPopTime == null ||
+          DateTime.now().difference(lastPopTime) > Duration(seconds: 2)) {
+        lastPopTime = DateTime.now();
+        var snackBar = SnackBar(
+          content: Text('再按一次退出'),
+          action: new SnackBarAction(
+              label: '退出',
+              onPressed: () {
+                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+              }),
+        );
+        _scaffoldkey.currentState.showSnackBar(snackBar);
+      } else {
+        lastPopTime = DateTime.now();
+        SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      }
+    }
+  }
 
   String webtitle = '';
   String weburl = '';
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: new Drawer(
-        child: buildDrawer(context),
-      ),
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: <Widget>[
-          new IconButton(
-            icon: new Icon(Icons.share),
-            tooltip: '分享',
-            onPressed: () => Share.share(webtitle + "\n" + weburl),
-          ),
-          new PopupMenuButton<String>(
-              itemBuilder: (BuildContext context) =><PopupMenuItem<String>>[
-                new PopupMenuItem(
-                    value: "1",
-                    child: new Text("反馈")
-                ),
-                new PopupMenuItem(
-                    value:'2',
-                    child: new Text("退出")
-                )
+    return WillPopScope(
+      onWillPop: () => _exitApp(context),
+      child: Scaffold(
+        key: _scaffoldkey,
+        drawer: new Drawer(
+          child: buildDrawer(context),
+        ),
+        appBar: AppBar(
+          title: Text(widget.title),
+          actions: <Widget>[
+            new IconButton(
+              icon: new Icon(Icons.share),
+              tooltip: '分享',
+              onPressed: () => Share.share(webtitle + "\n" + weburl),
+            ),
+            new PopupMenuButton<String>(
+              itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+                new PopupMenuItem(value: "1", child: new Text("反馈")),
+                new PopupMenuItem(value: '2', child: new Text("退出"))
               ],
-            onSelected: (String value){
-              if(value == '1'){
-                _controller.loadUrl('https://bbs.craft.moe/d/521-app/');
-              }
-              if(value == '2'){
-                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-              }
-            },
-          ),
-        ],
-      ),
-      body: WebView(
-        initialUrl: 'https://bbs.craft.moe',
-        javascriptMode: JavascriptMode.unrestricted,
-        onPageFinished: (url) {
-          _controller.evaluateJavascript("document.title").then((result) {
-            webtitle = result;
-          });
-          _controller.evaluateJavascript("window.location.href").then((result) {
-            weburl = result;
-          });
-        },
-        onWebViewCreated: (WebViewController con) {
-          _controller = con;
-        },
+              onSelected: (String value) {
+                if (value == '1') {
+                  _controller.loadUrl('https://bbs.craft.moe/d/521-app/');
+                }
+                if (value == '2') {
+                  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                }
+              },
+            ),
+          ],
+        ),
+        body: Builder(
+          builder: (BuildContext context) {
+            return WebView(
+              initialUrl: 'https://bbs.craft.moe',
+              javascriptMode: JavascriptMode.unrestricted,
+              onPageFinished: (url) {
+                _controller.evaluateJavascript("document.title").then((result) {
+                  webtitle = result;
+                });
+                _controller
+                    .evaluateJavascript("window.location.href")
+                    .then((result) {
+                  weburl = result;
+                });
+              },
+              onWebViewCreated: (WebViewController con) {
+                _controller = con;
+                _controller.canGoBack();
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -120,7 +147,8 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text("世界地图"),
           onTap: () {
             Navigator.of(context).pop();
-            _controller.loadUrl('https://kedama-map.jsw3286.eu.org/?utm_source=blw_app');
+            _controller.loadUrl(
+                'https://kedama-map.jsw3286.eu.org/?utm_source=blw_app');
           },
         ),
         ListTile(
