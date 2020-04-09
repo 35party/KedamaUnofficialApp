@@ -29,6 +29,8 @@ dependencies:
     git:
       url: git://github.com/paizi/plugins.git
       path: packages/webview_flutter
+  jpush_flutter: 0.5.3
+  fluttertoast: ^4.0.0
 
 dev_dependencies:
   flutter_test:

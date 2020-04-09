@@ -3,6 +3,8 @@ import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:share/share.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   debugPaintSizeEnabled = false;
@@ -91,15 +93,41 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             new PopupMenuButton<String>(
               itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-                new PopupMenuItem(value: "1", child: new Text("反馈")),
-                new PopupMenuItem(value: '2', child: new Text("退出"))
+                new PopupMenuItem(value: 'open_push', child: new Text("开启推送")),
+                new PopupMenuItem(value: 'close_push', child: new Text("关闭推送")),
+                new PopupMenuItem(value: "feedback", child: new Text("反馈")),
+                new PopupMenuItem(value: 'exit', child: new Text("退出"))
               ],
               onSelected: (String value) {
-                if (value == '1') {
+                if (value == 'feedback') {
                   _controller.loadUrl('https://bbs.craft.moe/d/521-app/');
                 }
-                if (value == '2') {
+                if (value == 'exit') {
                   SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                }
+                if (value == 'open_push') {
+                  jpush.resumePush();
+                  Fluttertoast.showToast(
+                      msg: "推送已开启",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.black,
+                      textColor: Colors.white,
+                      fontSize: 16.0
+                  );
+                }
+                if (value == 'close_push') {
+                  jpush.stopPush();
+                  Fluttertoast.showToast(
+                      msg: "推送已关闭",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.black,
+                      textColor: Colors.white,
+                      fontSize: 16.0
+                  );
                 }
               },
             ),
@@ -168,6 +196,14 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
         ListTile(
+          leading: Icon(Icons.directions_bike),
+          title: Text("毛运会专题"),
+          onTap: () {
+            Navigator.of(context).pop();
+            _controller.loadUrl('https://ksg.blw.moe');
+          },
+        ),
+        ListTile(
           leading: Icon(Icons.settings_input_svideo),
           title: Text("调试工具"),
           onTap: () {
@@ -191,4 +227,66 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
   }
-}
+    Future<void> initPlatformState() async {
+      String platformVersion;
+      try {
+        jpush.addEventHandler(
+            onReceiveNotification: (Map<String, dynamic> message) async {
+              print("flutter onReceiveNotification: $message");
+              setState(() {
+                debugLable = "flutter onReceiveNotification: $message";
+              });
+            }, onOpenNotification: (Map<String, dynamic> message) async {
+          print("flutter onOpenNotification: $message");
+          setState(() {
+            debugLable = "flutter onOpenNotification: $message";
+          });
+        }, onReceiveMessage: (Map<String, dynamic> message) async {
+          print("flutter onReceiveMessage: $message");
+          setState(() {
+            debugLable = "flutter onReceiveMessage: $message";
+          });
+        }, onReceiveNotificationAuthorization:
+            (Map<String, dynamic> message) async {
+          print("flutter onReceiveNotificationAuthorization: $message");
+          setState(() {
+            debugLable = "flutter onReceiveNotificationAuthorization: $message";
+          });
+        });
+      } on PlatformException {
+        platformVersion = 'Failed to get platform version.';
+      }
+
+      jpush.setup(
+        appKey: "f952c64c120ec11db6225536", //你自己应用的 AppKey
+        channel: "theChannel",
+        production: false,
+        debug: true,
+      );
+      jpush.applyPushAuthority(
+          new NotificationSettingsIOS(sound: true, alert: true, badge: true));
+
+      // Platform messages may fail, so we use a try/catch PlatformException.
+      jpush.getRegistrationID().then((rid) {
+        print("flutter get registration id : $rid");
+        setState(() {
+          debugLable = "flutter getRegistrationID: $rid";
+        });
+      });
+
+      // If the widget was removed from the tree while the asynchronous platform
+      // message was in flight, we want to discard the reply rather than calling
+      // setState to update our non-existent appearance.
+      if (!mounted) return;
+
+      setState(() {
+        debugLable = platformVersion;
+      });
+    }
+  String debugLable = 'Unknown';
+  final JPush jpush = new JPush();
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();}
+  }
