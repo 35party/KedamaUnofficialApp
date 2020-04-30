@@ -11,7 +11,7 @@ description: Kedama Unoffical APP
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.1
+version: 1.2.0
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -22,15 +22,16 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
-  share: ^0.6.3+6
-  flutter_launcher_icons: ^0.7.4
+  cupertino_icons: ^0.1.3
+  share: ^0.6.4
+  flutter_launcher_icons: ^0.7.5
   webview_flutter:
     git:
       url: git://github.com/paizi/plugins.git
       path: packages/webview_flutter
   jpush_flutter: 0.5.3
-  fluttertoast: ^4.0.0
+  fluttertoast: ^4.0.1
+  http: ^0.12.1
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +55,12 @@ flutter:
   #  - images/a_dot_ham.jpeg
   assets:
     - images/banner.png
+    - images/players/BlingWang.png
+    - images/players/forst_candy.png
+    - images/players/Azur_KingGeorgeV.png
+    - images/players/PinkishRed.png
+    - images/players/Azur_Washington.png
+    - images/players/Ping_timeout.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

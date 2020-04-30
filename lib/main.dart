@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
 import 'package:flutter/services.dart';
@@ -99,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 new PopupMenuItem(value: 'open_push', child: new Text("开启推送")),
                 new PopupMenuItem(value: 'close_push', child: new Text("关闭推送")),
                 new PopupMenuItem(value: "feedback", child: new Text("反馈")),
+                new PopupMenuItem(value: "about", child: new Text("关于")),
                 new PopupMenuItem(value: 'exit', child: new Text("退出"))
               ],
               onSelected: (String value) {
@@ -129,6 +131,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       backgroundColor: Colors.black,
                       textColor: Colors.white,
                       fontSize: 16.0);
+                }
+                if (value == 'about') {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AboutScreen()));
                 }
               },
             ),
@@ -292,5 +298,191 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     initPlatformState();
+  }
+}
+
+class AboutScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('关于应用'),
+        ),
+        body: ListView(children: <Widget>[
+          Container(
+              alignment: Alignment.center,
+              child:
+                  Column(mainAxisAlignment: MainAxisAlignment.start, children: <
+                      Widget>[
+                Container(
+                  width: 300,
+                  height: 80,
+                  margin: EdgeInsets.fromLTRB(30.0, 20.0, 0.0, 15.0),
+                  child: Row(children: <Widget>[
+                    Image.asset('images/players/BlingWang.png'),
+                    Container(
+                        margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+                        child: RichText(
+                            text: TextSpan(children: <TextSpan>[
+                          TextSpan(
+                            text: 'BlingWang\n',
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 20.0),
+                          ),
+                          TextSpan(
+                            text: '开发者\n',
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 16.0),
+                          ),
+                        ]))),
+                  ]),
+                ),
+                Text(
+                  '另外感谢下列提出意见的朋友们\n正是因为你们，这个APP才变得越来越好\n',
+                  style: TextStyle(fontSize: 18.0),
+                  textAlign: TextAlign.center,
+                ),
+                Container(
+                  width: 300,
+                  height: 80,
+                  margin: EdgeInsets.fromLTRB(30.0, 0.0, 0.0, 5.0),
+                  child: Row(children: <Widget>[
+                    Image.asset('images/players/forst_candy.png'),
+                    Container(
+                        margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+                        child: RichText(
+                            text: TextSpan(children: <TextSpan>[
+                          TextSpan(
+                            text: 'forst_candy\n',
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 20.0),
+                          ),
+                          TextSpan(
+                            text: '小甜甜\n',
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 16.0),
+                          ),
+                        ]))),
+                  ]),
+                ),
+                Container(
+                  width: 300,
+                  height: 80,
+                  margin: EdgeInsets.fromLTRB(30.0, 0.0, 0.0, 5.0),
+                  child: Row(children: <Widget>[
+                    Image.asset('images/players/Azur_KingGeorgeV.png'),
+                    Container(
+                        margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+                        child: RichText(
+                            text: TextSpan(children: <TextSpan>[
+                          TextSpan(
+                            text: 'Azur_KingGeorgeV\n',
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 20.0),
+                          ),
+                          TextSpan(
+                            text: '大哥大乔五\n',
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 16.0),
+                          ),
+                        ]))),
+                  ]),
+                ),
+                Container(
+                  width: 300,
+                  height: 80,
+                  margin: EdgeInsets.fromLTRB(30.0, 0.0, 0.0, 5.0),
+                  child: Row(children: <Widget>[
+                    Image.asset('images/players/PinkishRed.png'),
+                    Container(
+                        margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+                        child: RichText(
+                            text: TextSpan(children: <TextSpan>[
+                          TextSpan(
+                            text: 'PinkishRed\n',
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 20.0),
+                          ),
+                          TextSpan(
+                            text: '贰叄\n',
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 16.0),
+                          ),
+                        ]))),
+                  ]),
+                ),
+                Container(
+                  width: 300,
+                  height: 80,
+                  margin: EdgeInsets.fromLTRB(30.0, 0.0, 0.0, 5.0),
+                  child: Row(children: <Widget>[
+                    Image.asset('images/players/Azur_Washington.png'),
+                    Container(
+                        margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+                        child: RichText(
+                            text: TextSpan(children: <TextSpan>[
+                          TextSpan(
+                            text: 'Azur_Washington\n',
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 20.0),
+                          ),
+                          TextSpan(
+                            text: '花生\n',
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 16.0),
+                          ),
+                        ]))),
+                  ]),
+                ),
+                Container(
+                  width: 300,
+                  height: 80,
+                  margin: EdgeInsets.fromLTRB(30.0, 0.0, 0.0, 5.0),
+                  child: Row(children: <Widget>[
+                    Image.asset('images/players/Ping_timeout.png'),
+                    Container(
+                        margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+                        child: RichText(
+                            text: TextSpan(children: <TextSpan>[
+                          TextSpan(
+                            text: 'Ping_timeout\n',
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 20.0),
+                          ),
+                          TextSpan(
+                            text: 'WIP\n',
+                            style: TextStyle(
+                                color: Colors.orange,
+                                fontSize: 16.0,
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ]))),
+                  ]),
+                ),
+                Container(
+                  width: 300,
+                  height: 80,
+                  margin: EdgeInsets.fromLTRB(30.0, 0.0, 0.0, 50.0),
+                  child: Row(children: <Widget>[
+                    Container(
+                        margin: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
+                        child: RichText(
+                            text: TextSpan(children: <TextSpan>[
+                          TextSpan(
+                            text: '更多精彩，等你发现！\n',
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 20.0),
+                          ),
+                          TextSpan(
+                            text: '©2020 blw.moe All rights reserved.\n',
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 16.0),
+                          ),
+                        ]))),
+                  ]),
+                ),
+              ]))
+        ]));
   }
 }
