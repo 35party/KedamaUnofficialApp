@@ -20,9 +20,11 @@ class MyApp extends StatelessWidget {
       title: '毛玉线圈物语',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        accentColor: Colors.black,
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
+        accentColor: Colors.white,
       ),
       home: MyHomePage(title: '毛玉线圈物语'),
     );
@@ -327,7 +329,7 @@ class AboutScreen extends StatelessWidget {
                           TextSpan(
                             text: 'BlingWang\n',
                             style:
-                                TextStyle(color: Colors.black, fontSize: 20.0),
+                                TextStyle(color: Theme.of(context).accentColor, fontSize: 20.0),
                           ),
                           TextSpan(
                             text: '开发者\n',
@@ -355,7 +357,7 @@ class AboutScreen extends StatelessWidget {
                           TextSpan(
                             text: 'forst_candy\n',
                             style:
-                                TextStyle(color: Colors.black, fontSize: 20.0),
+                                TextStyle(color: Theme.of(context).accentColor, fontSize: 20.0),
                           ),
                           TextSpan(
                             text: '小甜甜\n',
@@ -378,7 +380,7 @@ class AboutScreen extends StatelessWidget {
                           TextSpan(
                             text: 'Azur_KingGeorgeV\n',
                             style:
-                                TextStyle(color: Colors.black, fontSize: 20.0),
+                                TextStyle(color: Theme.of(context).accentColor, fontSize: 20.0),
                           ),
                           TextSpan(
                             text: '大哥大乔五\n',
@@ -401,7 +403,7 @@ class AboutScreen extends StatelessWidget {
                           TextSpan(
                             text: 'PinkishRed\n',
                             style:
-                                TextStyle(color: Colors.black, fontSize: 20.0),
+                                TextStyle(color: Theme.of(context).accentColor, fontSize: 20.0),
                           ),
                           TextSpan(
                             text: '贰叄\n',
@@ -424,7 +426,7 @@ class AboutScreen extends StatelessWidget {
                           TextSpan(
                             text: 'Azur_Washington\n',
                             style:
-                                TextStyle(color: Colors.black, fontSize: 20.0),
+                                TextStyle(color: Theme.of(context).accentColor, fontSize: 20.0),
                           ),
                           TextSpan(
                             text: '花生\n',
@@ -447,7 +449,7 @@ class AboutScreen extends StatelessWidget {
                           TextSpan(
                             text: 'Ping_timeout\n',
                             style:
-                                TextStyle(color: Colors.black, fontSize: 20.0),
+                                TextStyle(color: Theme.of(context).accentColor, fontSize: 20.0),
                           ),
                           TextSpan(
                             text: 'WIP\n',
@@ -472,7 +474,7 @@ class AboutScreen extends StatelessWidget {
                           TextSpan(
                             text: '更多精彩，等你发现！\n',
                             style:
-                                TextStyle(color: Colors.black, fontSize: 20.0),
+                                TextStyle(color: Theme.of(context).accentColor, fontSize: 20.0),
                           ),
                           TextSpan(
                             text: '©2020 blw.moe All rights reserved.\n',
