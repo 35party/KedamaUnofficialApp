@@ -154,15 +154,6 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
         ListTile(
-          leading: Icon(Icons.my_location),
-          title: Text("世界地图"),
-          onTap: () {
-            Navigator.of(context).pop();
-            _controller.loadUrl(
-                'https://kedama-map.jsw3286.eu.org/?utm_source=blw_app');
-          },
-        ),
-        ListTile(
           leading: Icon(Icons.local_laundry_service),
           title: Text("服务器状态"),
           onTap: () {
@@ -172,18 +163,18 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         ListTile(
           leading: Icon(Icons.playlist_add_check),
-          title: Text("玩家数据查询"),
+          title: Text("玩家数据查询（官方）"),
           onTap: () {
             Navigator.of(context).pop();
-            _controller.loadUrl('https://labs.blw.moe/kedama');
+            _controller.loadUrl('https://stats.craft.moe');
           },
         ),
         ListTile(
-          leading: Icon(Icons.directions_bike),
-          title: Text("毛运会专题"),
+          leading: Icon(Icons.playlist_add_check),
+          title: Text("玩家数据查询（第三方）"),
           onTap: () {
             Navigator.of(context).pop();
-            _controller.loadUrl('https://ksg.blw.moe');
+            _controller.loadUrl('https://labs.blw.moe/kedama');
           },
         ),
         ListTile(
