@@ -128,13 +128,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.4"
-  jpush_flutter:
-    dependency: "direct main"
-    description:
-      name: jpush_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.5"
   js:
     dependency: transitive
     description:
@@ -184,13 +177,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.3.0"
-  platform:
-    dependency: transitive
-    description:
-      name: platform
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.2"
   share:
     dependency: "direct main"
     description:

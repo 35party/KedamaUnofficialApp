@@ -4,8 +4,6 @@ import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:share/share.dart';
-import 'package:jpush_flutter/jpush_flutter.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   debugPaintSizeEnabled = false;
@@ -99,8 +97,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             new PopupMenuButton<String>(
               itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-                new PopupMenuItem(value: 'open_push', child: new Text("开启推送")),
-                new PopupMenuItem(value: 'close_push', child: new Text("关闭推送")),
                 new PopupMenuItem(value: "feedback", child: new Text("反馈")),
                 new PopupMenuItem(value: "about", child: new Text("关于")),
                 new PopupMenuItem(value: 'exit', child: new Text("退出"))
@@ -111,28 +107,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
                 if (value == 'exit') {
                   SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-                }
-                if (value == 'open_push') {
-                  jpush.resumePush();
-                  Fluttertoast.showToast(
-                      msg: "推送已开启",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.black,
-                      textColor: Colors.white,
-                      fontSize: 16.0);
-                }
-                if (value == 'close_push') {
-                  jpush.stopPush();
-                  Fluttertoast.showToast(
-                      msg: "推送已关闭",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.black,
-                      textColor: Colors.white,
-                      fontSize: 16.0);
                 }
                 if (value == 'about') {
                   Navigator.push(context,
@@ -236,73 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
   }
-
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    try {
-      jpush.addEventHandler(
-          onReceiveNotification: (Map<String, dynamic> message) async {
-        print("flutter onReceiveNotification: $message");
-        setState(() {
-          debugLable = "flutter onReceiveNotification: $message";
-        });
-      }, onOpenNotification: (Map<String, dynamic> message) async {
-        print("flutter onOpenNotification: $message");
-        setState(() {
-          debugLable = "flutter onOpenNotification: $message";
-        });
-      }, onReceiveMessage: (Map<String, dynamic> message) async {
-        print("flutter onReceiveMessage: $message");
-        setState(() {
-          debugLable = "flutter onReceiveMessage: $message";
-        });
-      }, onReceiveNotificationAuthorization:
-              (Map<String, dynamic> message) async {
-        print("flutter onReceiveNotificationAuthorization: $message");
-        setState(() {
-          debugLable = "flutter onReceiveNotificationAuthorization: $message";
-        });
-      });
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    jpush.setup(
-      appKey: "f952c64c120ec11db6225536", //你自己应用的 AppKey
-      channel: "theChannel",
-      production: true,
-      debug: false,
-    );
-    jpush.applyPushAuthority(
-        new NotificationSettingsIOS(sound: true, alert: true, badge: true));
-
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    jpush.getRegistrationID().then((rid) {
-      print("flutter get registration id : $rid");
-      setState(() {
-        debugLable = "flutter getRegistrationID: $rid";
-      });
-    });
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      debugLable = platformVersion;
-    });
-  }
-
-  String debugLable = 'Unknown';
-  final JPush jpush = new JPush();
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
 }
-
 class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -314,8 +222,8 @@ class AboutScreen extends StatelessWidget {
           Container(
               alignment: Alignment.center,
               child:
-                  Column(mainAxisAlignment: MainAxisAlignment.start, children: <
-                      Widget>[
+              Column(mainAxisAlignment: MainAxisAlignment.start, children: <
+                  Widget>[
                 Container(
                   width: 300,
                   height: 80,
@@ -326,17 +234,17 @@ class AboutScreen extends StatelessWidget {
                         margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                         child: RichText(
                             text: TextSpan(children: <TextSpan>[
-                          TextSpan(
-                            text: 'BlingWang\n',
-                            style:
+                              TextSpan(
+                                text: 'BlingWang\n',
+                                style:
                                 TextStyle(color: Theme.of(context).accentColor, fontSize: 20.0),
-                          ),
-                          TextSpan(
-                            text: '开发者\n',
-                            style:
+                              ),
+                              TextSpan(
+                                text: '开发者\n',
+                                style:
                                 TextStyle(color: Colors.grey, fontSize: 16.0),
-                          ),
-                        ]))),
+                              ),
+                            ]))),
                   ]),
                 ),
                 Text(
@@ -354,17 +262,17 @@ class AboutScreen extends StatelessWidget {
                         margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                         child: RichText(
                             text: TextSpan(children: <TextSpan>[
-                          TextSpan(
-                            text: 'forst_candy\n',
-                            style:
+                              TextSpan(
+                                text: 'forst_candy\n',
+                                style:
                                 TextStyle(color: Theme.of(context).accentColor, fontSize: 20.0),
-                          ),
-                          TextSpan(
-                            text: '小甜甜\n',
-                            style:
+                              ),
+                              TextSpan(
+                                text: '小甜甜\n',
+                                style:
                                 TextStyle(color: Colors.grey, fontSize: 16.0),
-                          ),
-                        ]))),
+                              ),
+                            ]))),
                   ]),
                 ),
                 Container(
@@ -377,17 +285,17 @@ class AboutScreen extends StatelessWidget {
                         margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                         child: RichText(
                             text: TextSpan(children: <TextSpan>[
-                          TextSpan(
-                            text: 'Azur_KingGeorgeV\n',
-                            style:
+                              TextSpan(
+                                text: 'Azur_KingGeorgeV\n',
+                                style:
                                 TextStyle(color: Theme.of(context).accentColor, fontSize: 20.0),
-                          ),
-                          TextSpan(
-                            text: '大哥大乔五\n',
-                            style:
+                              ),
+                              TextSpan(
+                                text: '大哥大乔五\n',
+                                style:
                                 TextStyle(color: Colors.grey, fontSize: 16.0),
-                          ),
-                        ]))),
+                              ),
+                            ]))),
                   ]),
                 ),
                 Container(
@@ -400,17 +308,17 @@ class AboutScreen extends StatelessWidget {
                         margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                         child: RichText(
                             text: TextSpan(children: <TextSpan>[
-                          TextSpan(
-                            text: 'PinkishRed\n',
-                            style:
+                              TextSpan(
+                                text: 'PinkishRed\n',
+                                style:
                                 TextStyle(color: Theme.of(context).accentColor, fontSize: 20.0),
-                          ),
-                          TextSpan(
-                            text: '贰叄\n',
-                            style:
+                              ),
+                              TextSpan(
+                                text: '贰叄\n',
+                                style:
                                 TextStyle(color: Colors.grey, fontSize: 16.0),
-                          ),
-                        ]))),
+                              ),
+                            ]))),
                   ]),
                 ),
                 Container(
@@ -423,17 +331,17 @@ class AboutScreen extends StatelessWidget {
                         margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                         child: RichText(
                             text: TextSpan(children: <TextSpan>[
-                          TextSpan(
-                            text: 'Azur_Washington\n',
-                            style:
+                              TextSpan(
+                                text: 'Azur_Washington\n',
+                                style:
                                 TextStyle(color: Theme.of(context).accentColor, fontSize: 20.0),
-                          ),
-                          TextSpan(
-                            text: '花生\n',
-                            style:
+                              ),
+                              TextSpan(
+                                text: '花生\n',
+                                style:
                                 TextStyle(color: Colors.grey, fontSize: 16.0),
-                          ),
-                        ]))),
+                              ),
+                            ]))),
                   ]),
                 ),
                 Container(
@@ -446,20 +354,20 @@ class AboutScreen extends StatelessWidget {
                         margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                         child: RichText(
                             text: TextSpan(children: <TextSpan>[
-                          TextSpan(
-                            text: 'Ping_timeout\n',
-                            style:
+                              TextSpan(
+                                text: 'Ping_timeout\n',
+                                style:
                                 TextStyle(color: Theme.of(context).accentColor, fontSize: 20.0),
-                          ),
-                          TextSpan(
-                            text: 'WIP\n',
-                            style: TextStyle(
-                                color: Colors.orange,
-                                fontSize: 16.0,
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ]))),
+                              ),
+                              TextSpan(
+                                text: 'WIP\n',
+                                style: TextStyle(
+                                    color: Colors.orange,
+                                    fontSize: 16.0,
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ]))),
                   ]),
                 ),
                 Container(
@@ -471,17 +379,17 @@ class AboutScreen extends StatelessWidget {
                         margin: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
                         child: RichText(
                             text: TextSpan(children: <TextSpan>[
-                          TextSpan(
-                            text: '更多精彩，等你发现！\n',
-                            style:
+                              TextSpan(
+                                text: '更多精彩，等你发现！\n',
+                                style:
                                 TextStyle(color: Theme.of(context).accentColor, fontSize: 20.0),
-                          ),
-                          TextSpan(
-                            text: '©2020 blw.moe All rights reserved.\n',
-                            style:
+                              ),
+                              TextSpan(
+                                text: '©2020 blw.moe All rights reserved.\n',
+                                style:
                                 TextStyle(color: Colors.grey, fontSize: 16.0),
-                          ),
-                        ]))),
+                              ),
+                            ]))),
                   ]),
                 ),
               ]))
