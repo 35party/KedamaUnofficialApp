@@ -28,6 +28,7 @@ dependencies:
   webview_flutter: ^2.0.14
   fluttertoast: ^8.0.8
   http: ^0.13.3
+  flutter_egg: ^1.0.3
 
 dev_dependencies:
   flutter_test:
@@ -57,6 +58,15 @@ flutter:
     - images/players/PinkishRed.png
     - images/players/Azur_Washington.png
     - images/players/Ping_timeout.png
+    - images/players/Empesuzuran.png
+    - images/players/gdides.png
+    - images/players/Rikka_cute.png
+    - images/players/Eillenc.png
+    - images/players/langua.png
+    - images/players/Rhythm202.png
+    - images/players/Yaolinger102.png
+    - images/players/coolgunnerfish.png
+    - images/players/VLAGL.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
