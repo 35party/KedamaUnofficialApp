@@ -154,6 +154,14 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
         ListTile(
+          leading: Icon(Icons.search),
+          title: Text("论坛内搜索"),
+          onTap: () {
+            Navigator.of(context).pop();
+            _controller.loadUrl('https://dl.blingwang.cn/static/bbs_search.html');
+          },
+        ),
+        ListTile(
           leading: Icon(Icons.local_laundry_service),
           title: Text("服务器状态"),
           onTap: () {
