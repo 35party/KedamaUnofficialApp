@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
 import 'package:flutter/services.dart';
@@ -13,7 +13,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = ThemeData();
@@ -58,6 +57,13 @@ selectView(IconData icon, String text, String id) {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+  }
+  // Enable hybrid composition
+
   var _scaffoldkey = new GlobalKey<ScaffoldState>();
   DateTime lastPopTime = DateTime.now();
   WebViewController _controller;
@@ -134,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
               onSelected: (String value) {
                 if (value == 'feedback') {
-                  _controller.loadUrl('https://bbs.craft.moe/d/521-app/');
+                  _controller.loadUrl('https://forum.craft.moe/d/521-app/');
                 }
                 if (value == 'exit') {
                   SystemChannels.platform.invokeMethod('SystemNavigator.pop');
@@ -150,14 +156,16 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Builder(
           builder: (BuildContext context) {
             return WebView(
-              initialUrl: 'https://bbs.craft.moe',
+              initialUrl: 'https://forum.craft.moe',
               javascriptMode: JavascriptMode.unrestricted,
               onPageFinished: (url) {
-                _controller.evaluateJavascript("document.title").then((result) {
+                _controller
+                    .runJavascriptReturningResult("document.title")
+                    .then((result) {
                   webtitle = result;
                 });
                 _controller
-                    .evaluateJavascript("window.location.href")
+                    .runJavascriptReturningResult("window.location.href")
                     .then((result) {
                   weburl = result;
                 });
@@ -185,7 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           onTap: () {
             Navigator.of(context).pop();
-            _controller.loadUrl('https://bbs.craft.moe');
+            _controller.loadUrl('https://forum.craft.moe');
           },
         ),
         ListTile(
@@ -199,6 +207,42 @@ class _MyHomePageState extends State<MyHomePage> {
             Navigator.of(context).pop();
             _controller
                 .loadUrl('https://dl.blingwang.cn/static/bbs_search.html');
+          },
+        ),
+        ListTile(
+          leading:
+              Icon(Icons.map, color: Theme.of(context).colorScheme.secondary),
+          title: Text(
+            '世界地图',
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+          ),
+          onTap: () {
+            Navigator.of(context).pop();
+            _controller.loadUrl('https://3ec5k.csb.app/?world=v5');
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.location_pin,
+              color: Theme.of(context).colorScheme.secondary),
+          title: Text(
+            '毛线交通向导',
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+          ),
+          onTap: () {
+            Navigator.of(context).pop();
+            _controller.loadUrl('https://map.ououe.com/');
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.terminal,
+              color: Theme.of(context).colorScheme.secondary),
+          title: Text(
+            '指令大全',
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+          ),
+          onTap: () {
+            Navigator.of(context).pop();
+            _controller.loadUrl('https://www.craft.moe/help');
           },
         ),
         ListTile(
@@ -255,12 +299,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget buildDrawer(BuildContext context) {
     return new Container(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.onBackground,
         child: ListView(
           children: <Widget>[
             new Image.asset(
               'images/banner.png',
-              height: 170,
+              height: 200,
               fit: BoxFit.cover,
             ),
             new Container(
@@ -612,7 +656,7 @@ class AboutScreen extends StatelessWidget {
                     height: 430,
                     margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                     child: Column(children: <Widget>[
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
                       Text(
                         '\n请问你们看见我们家的蓝瓜了吗？\n他非常可爱，简直就是小天使\n',
                         style: TextStyle(
@@ -640,10 +684,10 @@ class AboutScreen extends StatelessWidget {
                 Container(
                   width: 300,
                   height: 80,
-                  margin: EdgeInsets.fromLTRB(30.0, 0.0, 0.0, 50.0),
+                  margin: EdgeInsets.fromLTRB(50.0, 0.0, 0.0, 0.0),
                   child: Row(children: <Widget>[
                     Container(
-                        margin: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
+                        margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
                         child: Egg(
                             neededNum: 20,
                             onTap: (int tapNum, int neededNum) {
@@ -673,20 +717,28 @@ class AboutScreen extends StatelessWidget {
                                   fontSize: 16.0);
                             },
                             child: RichText(
+                                textAlign: TextAlign.center,
                                 text: TextSpan(children: <TextSpan>[
-                              TextSpan(
-                                text: '更多精彩，等你发现！\n',
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                    fontSize: 20.0),
-                              ),
-                              TextSpan(
-                                text: '©2021 blw.moe All rights reserved.\n',
-                                style: TextStyle(
-                                    color: Colors.grey, fontSize: 16.0),
-                              ),
-                            ])))),
+                                  TextSpan(
+                                    text: '更多精彩，等你发现\n',
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                        fontSize: 20.0),
+                                  ),
+                                  TextSpan(
+                                    text: 'Version 1.3.0\n',
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 16.0),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        '©2022 blw.moe All rights reserved.\n',
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 16.0),
+                                  ),
+                                ])))),
                   ]),
                 ),
               ]))
