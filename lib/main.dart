@@ -140,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
               onSelected: (String value) {
                 if (value == 'feedback') {
-                  _controller.loadUrl('https://forum.craft.moe/d/521-app/');
+                  _controller.loadUrl('https://community.craft.moe/d/521-app/');
                 }
                 if (value == 'exit') {
                   SystemChannels.platform.invokeMethod('SystemNavigator.pop');
@@ -156,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Builder(
           builder: (BuildContext context) {
             return WebView(
-              initialUrl: 'https://forum.craft.moe',
+              initialUrl: 'https://community.craft.moe',
               javascriptMode: JavascriptMode.unrestricted,
               onPageFinished: (url) {
                 _controller
@@ -193,7 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           onTap: () {
             Navigator.of(context).pop();
-            _controller.loadUrl('https://forum.craft.moe');
+            _controller.loadUrl('https://community.craft.moe');
           },
         ),
         ListTile(
