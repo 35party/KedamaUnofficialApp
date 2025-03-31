@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:share/share.dart';
-import 'package:flutter_egg/flutter_egg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
@@ -37,9 +36,9 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  String title;
-  WebViewController controller;
+  final String? title;
+  MyHomePage({Key? key, this.title}) : super(key: key);
+  
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -57,22 +56,46 @@ selectView(IconData icon, String text, String id) {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late WebViewController _controller;
+  String webtitle = '';
+  String weburl = '';
+
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    // 初始化WebViewController
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageFinished: (String url) {
+            _controller.runJavaScriptReturningResult('document.title')
+                .then((result) {
+              setState(() {
+                webtitle = result.toString();
+              });
+            });
+            _controller.runJavaScriptReturningResult('window.location.href')
+                .then((result) {
+              setState(() {
+                weburl = result.toString();
+              });
+            });
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse('https://community.craft.moe'));
   }
-  // Enable hybrid composition
 
   var _scaffoldkey = new GlobalKey<ScaffoldState>();
   DateTime lastPopTime = DateTime.now();
-  WebViewController _controller;
+
   Future<bool> _exitApp(BuildContext context) async {
     if (await _controller.canGoBack()) {
       _controller.goBack();
+      return false;
     } else {
-      if (lastPopTime == null ||
-          DateTime.now().difference(lastPopTime) > Duration(seconds: 2)) {
+      if (DateTime.now().difference(lastPopTime) > Duration(seconds: 2)) {
         lastPopTime = DateTime.now();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Theme.of(context).colorScheme.background,
@@ -87,15 +110,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 SystemChannels.platform.invokeMethod('SystemNavigator.pop');
               }),
         ));
+        return false;
       } else {
         lastPopTime = DateTime.now();
         SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+        return true;
       }
     }
   }
 
-  String webtitle = '';
-  String weburl = '';
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -106,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: buildDrawer(context),
         ),
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Text(widget.title!),
           actions: <Widget>[
             new IconButton(
               icon: new Icon(Icons.share),
@@ -140,7 +163,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
               onSelected: (String value) {
                 if (value == 'feedback') {
-                  _controller.loadUrl('https://community.craft.moe/d/521-app/');
+                  _controller.loadRequest(
+                      Uri.parse('https://community.craft.moe/d/521-app/'));
                 }
                 if (value == 'exit') {
                   SystemChannels.platform.invokeMethod('SystemNavigator.pop');
@@ -153,30 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
-        body: Builder(
-          builder: (BuildContext context) {
-            return WebView(
-              initialUrl: 'https://community.craft.moe',
-              javascriptMode: JavascriptMode.unrestricted,
-              onPageFinished: (url) {
-                _controller
-                    .runJavascriptReturningResult("document.title")
-                    .then((result) {
-                  webtitle = result;
-                });
-                _controller
-                    .runJavascriptReturningResult("window.location.href")
-                    .then((result) {
-                  weburl = result;
-                });
-              },
-              onWebViewCreated: (WebViewController con) {
-                _controller = con;
-                _controller.canGoBack();
-              },
-            );
-          },
-        ),
+        body: WebViewWidget(controller: _controller),
       ),
     );
   }
@@ -193,7 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           onTap: () {
             Navigator.of(context).pop();
-            _controller.loadUrl('https://community.craft.moe');
+            _controller.loadRequest(Uri.parse('https://community.craft.moe'));
           },
         ),
         ListTile(
@@ -205,8 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           onTap: () {
             Navigator.of(context).pop();
-            _controller
-                .loadUrl('https://dl.blingwang.cn/static/bbs_search.html');
+            _controller.loadRequest(Uri.parse('https://dl.blingwang.cn/static/bbs_search.html'));
           },
         ),
         ListTile(
@@ -218,7 +218,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           onTap: () {
             Navigator.of(context).pop();
-            _controller.loadUrl('https://3ec5k.csb.app/?world=v5');
+            _controller.loadRequest(Uri.parse('https://3ec5k.csb.app/?world=v5'));
           },
         ),
         ListTile(
@@ -230,7 +230,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           onTap: () {
             Navigator.of(context).pop();
-            _controller.loadUrl('https://map.ououe.com/');
+            _controller.loadRequest(Uri.parse('https://map.ououe.com/'));
           },
         ),
         ListTile(
@@ -242,7 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           onTap: () {
             Navigator.of(context).pop();
-            _controller.loadUrl('https://www.craft.moe/help');
+            _controller.loadRequest(Uri.parse('https://www.craft.moe/help'));
           },
         ),
         ListTile(
@@ -254,7 +254,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           onTap: () {
             Navigator.of(context).pop();
-            _controller.loadUrl('https://labs.blw.moe/mcphp');
+            _controller.loadRequest(Uri.parse('https://labs.blw.moe/mcphp'));
           },
         ),
         ListTile(
@@ -266,7 +266,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           onTap: () {
             Navigator.of(context).pop();
-            _controller.loadUrl('https://stats.craft.moe');
+            _controller.loadRequest(Uri.parse('https://stats.craft.moe'));
           },
         ),
         ListTile(
@@ -278,7 +278,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           onTap: () {
             Navigator.of(context).pop();
-            _controller.loadUrl('https://labs.blw.moe/kedama');
+            _controller.loadRequest(Uri.parse('https://labs.blw.moe/kedama'));
           },
         ),
         ListTile(
@@ -290,7 +290,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           onTap: () {
             Navigator.of(context).pop();
-            _controller.loadUrl('https://labs.blw.moe/KedamaAppDebugTools');
+            _controller.loadRequest(Uri.parse('https://labs.blw.moe/KedamaAppDebugTools'));
           },
         ),
       ],
